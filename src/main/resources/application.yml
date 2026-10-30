@@ -1,0 +1,42 @@
+server:
+  port: ${PORT:8081}
+  shutdown: graceful
+
+spring:
+  application:
+    name: ms-fila-sql
+  datasource:
+    url: ${DB_URL:jdbc:sqlserver://localhost:1433;databaseName=openprontuario;encrypt=true;trustServerCertificate=true}
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none   # o schema é das migrações Flyway
+    properties:
+      hibernate:
+        timezone:
+          default_storage: NATIVE   # OffsetDateTime <-> DATETIMEOFFSET preservando o offset
+  flyway:
+    locations: classpath:db/migration
+
+openprontuario:
+  # Segredo compartilhado com BFF/Function/MS Prontuário; sem default de propósito (fail-fast)
+  internal-api-key: ${INTERNAL_API_KEY}
+  servicebus:
+    connection-string: ${SERVICEBUS_CONNECTION_STRING:}
+    topic: ${SERVICEBUS_TOPIC:eventos-atendimento}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  pattern:
+    level: "%5p [%X{correlationId:-}]"
