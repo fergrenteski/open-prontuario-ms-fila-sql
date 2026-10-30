@@ -1,0 +1,19 @@
+# Build
+target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# Segredos e configuração local
+.env
+*.env.local
+local.settings.json
+
+# SO
+.DS_Store
