@@ -34,7 +34,11 @@ management:
         include: health
 
 springdoc:
+  # Swagger público de propósito (entregável do PJBL); o resto da API exige X-Internal-Key
+  api-docs:
+    enabled: true
   swagger-ui:
+    enabled: true
     path: /swagger-ui.html
 
 logging:

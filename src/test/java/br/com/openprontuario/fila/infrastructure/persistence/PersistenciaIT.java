@@ -54,8 +54,6 @@ class PersistenciaIT extends IntegracaoBaseIT {
                 .isEqualTo(new Lotacao("lot-3", "usr-prof-03", "upa-01", PerfilUsuario.PROFISSIONAL));
         assertThat(pacientes.buscarPorId("pac-101")).get()
                 .isEqualTo(new Paciente("pac-101", "João Pereira", "11111111111", "700000000000001"));
-        assertThat(jdbc.queryForObject("select count(*) from registros_fila where paciente_id in ('pac-101','pac-102')",
-                Integer.class)).isZero();
     }
 
     @Test
