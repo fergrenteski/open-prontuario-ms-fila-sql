@@ -34,9 +34,10 @@ import java.time.ZoneId;
 @Configuration
 public class UseCaseConfig {
 
+    /** Precisão de milissegundos: o que a API devolve é o mesmo que o DATETIMEOFFSET guarda. */
     @Bean
     Clock relogio() {
-        return Clock.system(ZoneId.of("America/Sao_Paulo"));
+        return Clock.tickMillis(ZoneId.of("America/Sao_Paulo"));
     }
 
     // Unidades

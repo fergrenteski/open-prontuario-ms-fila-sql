@@ -1,5 +1,6 @@
 package br.com.openprontuario.fila.api.fila;
 
+import br.com.openprontuario.fila.api.comum.CabecalhoTexto;
 import br.com.openprontuario.fila.application.fila.alterarprioridade.AlterarPrioridadeUseCase;
 import br.com.openprontuario.fila.application.fila.avisarchegada.AvisarChegadaCommand;
 import br.com.openprontuario.fila.application.fila.avisarchegada.AvisarChegadaUseCase;
@@ -84,7 +85,8 @@ public class FilaController {
                                               @RequestHeader("X-User-Id") String usuarioId,
                                               @RequestHeader(value = "X-User-Name", required = false) String nome,
                                               @Valid @RequestBody AvisoChegadaRequest request) {
-        return RegistroFilaResponse.de(avisar.executar(new AvisarChegadaCommand(usuarioId, nome, unidadeId,
+        return RegistroFilaResponse.de(avisar.executar(new AvisarChegadaCommand(usuarioId,
+                CabecalhoTexto.decodificar(nome), unidadeId,
                 request.sintomas(), request.tempoEstimadoChegadaMin())));
     }
 

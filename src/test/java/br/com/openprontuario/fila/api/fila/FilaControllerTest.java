@@ -88,6 +88,21 @@ class FilaControllerTest {
     }
 
     @Test
+    void nomeComAcentoChegaCertoEmUtf8OuLatin1() throws Exception {
+        when(avisar.executar(any())).thenReturn(new RegistroFilaResult(registro, "João Pereira"));
+        String utf8LidoComoLatin1 = new String("João Pereira".getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                java.nio.charset.StandardCharsets.ISO_8859_1);
+
+        for (String cabecalho : List.of(utf8LidoComoLatin1, "João Pereira")) {
+            mvc.perform(comoBff(post("/fila/upa-01/aviso-chegada"), "pac-101").header("X-User-Name", cabecalho)
+                            .contentType(MediaType.APPLICATION_JSON).content("{\"sintomas\":[\"febre\"]}"))
+                    .andExpect(status().isCreated());
+        }
+        verify(avisar, org.mockito.Mockito.times(2)).executar(new AvisarChegadaCommand("pac-101", "João Pereira",
+                "upa-01", List.of("febre"), null));
+    }
+
+    @Test
     void avisoSemSintomasEh400ComProblemDetails() throws Exception {
         mvc.perform(comoBff(post("/fila/upa-01/aviso-chegada"), "pac-101").header("X-Correlation-Id", "corr-123")
                         .contentType(MediaType.APPLICATION_JSON).content("{\"sintomas\":[]}"))
