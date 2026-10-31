@@ -70,7 +70,18 @@ class ServiceBusEventPublisherAdapterTest {
         verify(sender).sendMessage(captor.capture());
         JsonNode corpo = new ObjectMapper().readTree(captor.getValue().getBody().toBytes());
         assertThat(corpo.get("statusAnterior").asText()).isEqualTo("A_CAMINHO");
-        assertThat(captor.getValue().getCorrelationId()).isNull();
+        // sem requisição HTTP (MDC vazio) a mensagem ainda sai com correlationId (exigido pela Function)
+        assertThat(captor.getValue().getCorrelationId()).matches("[0-9a-f-]{36}");
+    }
+
+    @Test
+    void correlationIdEmBrancoNoMdcTambemGeraUmNovo() {
+        MDC.put("correlationId", " ");
+        adapter.publicar(evento);
+
+        ArgumentCaptor<ServiceBusMessage> captor = ArgumentCaptor.forClass(ServiceBusMessage.class);
+        verify(sender).sendMessage(captor.capture());
+        assertThat(UUID.fromString(captor.getValue().getCorrelationId())).isNotNull();
     }
 
     @Test
