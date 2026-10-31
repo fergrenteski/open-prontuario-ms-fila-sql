@@ -262,9 +262,9 @@ O `-Pintegration` sobe um SQL Server 2022 real e valida:
 ## Imagem Docker
 
 ```bash
-docker build -t <usuario>/pjbl/ms-fila-sql:<tag> .
+docker build -t <usuario>/pjbl-ms-fila-sql:<tag> .
 docker login
-docker push <usuario>/pjbl/ms-fila-sql:<tag>
+docker push <usuario>/pjbl-ms-fila-sql:<tag>
 ```
 
 A imagem roda com usuário não-root (UID 10001) e tem `HEALTHCHECK` em `/actuator/health` e
